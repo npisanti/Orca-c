@@ -417,11 +417,11 @@ END_OPERATOR
 
 BEGIN_OPERATOR(add)
   LOWERCASE_REQUIRES_BANG;
+  PORT(0, -1, IN);
   PORT(0, 1, IN);
-  PORT(0, 2, IN);
   PORT(1, 0, OUT);
-  Usz a = index_of(PEEK(0, 1));
-  Usz b = index_of(PEEK(0, 2));
+  Usz a = index_of(PEEK(0, -1));
+  Usz b = index_of(PEEK(0, 1));
   POKE(1, 0, indexed_glyphs[(a + b) % Glyphs_index_count]);
 END_OPERATOR
 
@@ -453,7 +453,7 @@ BEGIN_OPERATOR(clock)
   if (rate == 0)
     rate = 1;
   if (mod_num == 0)
-    mod_num = 10;
+    mod_num = 8;
   Glyph g = glyph_of(Tick_number / rate % mod_num);
   POKE(1, 0, g);
 END_OPERATOR
@@ -468,18 +468,18 @@ BEGIN_OPERATOR(delay)
   if (rate == 0)
     rate = 1;
   if (mod_num == 0)
-    mod_num = 10;
+    mod_num = 8;
   Glyph g = Tick_number % (rate * mod_num) == 0 ? '*' : '.';
   POKE(1, 0, g);
 END_OPERATOR
 
 BEGIN_OPERATOR(if)
   LOWERCASE_REQUIRES_BANG;
+  PORT(0, -1, IN);
   PORT(0, 1, IN);
-  PORT(0, 2, IN);
   PORT(1, 0, OUT);
-  Glyph g0 = PEEK(0, 1);
-  Glyph g1 = PEEK(0, 2);
+  Glyph g0 = PEEK(0, -1);
+  Glyph g1 = PEEK(0, 1);
   POKE(1, 0, g0 == g1 ? '*' : '.');
 END_OPERATOR
 
@@ -506,11 +506,11 @@ END_OPERATOR
 
 BEGIN_OPERATOR(increment)
   LOWERCASE_REQUIRES_BANG;
+  PORT(0, -1, IN);
   PORT(0, 1, IN);
-  PORT(0, 2, IN);
   PORT(1, 0, IN | OUT);
-  Usz a = index_of(PEEK(0, 1));
-  Usz b = index_of(PEEK(0, 2));
+  Usz a = index_of(PEEK(0, -1));
+  Usz b = index_of(PEEK(0, 1));
   Usz val = index_of(PEEK(1, 0));
   if (a < b) {
     if (val < a || val >= b - 1)
@@ -583,11 +583,11 @@ END_OPERATOR
 
 BEGIN_OPERATOR(modulo)
   LOWERCASE_REQUIRES_BANG;
+  PORT(0, -1, IN);
   PORT(0, 1, IN);
-  PORT(0, 2, IN);
   PORT(1, 0, OUT);
-  Usz ia = index_of(PEEK(0, 1));
-  Usz ib = index_of(PEEK(0, 2));
+  Usz ia = index_of(PEEK(0, -1));
+  Usz ib = index_of(PEEK(0, 1));
   POKE(1, 0, indexed_glyphs[ib == 0 ? 0 : (ia % ib)]);
 END_OPERATOR
 
