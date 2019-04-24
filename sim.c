@@ -659,6 +659,8 @@ BEGIN_OPERATOR(random)
   PORT(1, 0, OUT);
   Usz a = index_of(PEEK(0, 1));
   Usz b = index_of(PEEK(0, 2));
+  if (b == 0)
+    b = 36;
   Usz min, max;
   if (a == b) {
     POKE(1, 0, glyph_of(a));
