@@ -512,22 +512,16 @@ BEGIN_OPERATOR(increment)
   PORT(0, -1, IN);
   PORT(0, 1, IN);
   PORT(1, 0, IN | OUT);
-  Usz a = index_of(PEEK(0, -1));
-  Usz b = index_of(PEEK(0, 1));
+  Glyph g = PEEK(0, -1);
+  Usz rate = 1;
+  if (g != '.')
+    rate = index_of(g);
+  Usz max = index_of(PEEK(0, 1));
   Usz val = index_of(PEEK(1, 0));
-  if (a < b) {
-    if (val < a || val >= b - 1)
-      val = a;
-    else
-      ++val;
-  } else if (a > b) {
-    if (val <= b || val > a)
-      val = a - 1;
-    else
-      --val;
-  } else {
-    return;
-  }
+  if (max == 0)
+    max = 36;
+  val = val + rate;
+  val = val % max;
   POKE(1, 0, glyph_of(val));
 END_OPERATOR
 
