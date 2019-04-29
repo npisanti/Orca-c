@@ -725,10 +725,8 @@ BEGIN_OPERATOR(variable)
   PORT(0, 1, IN | PARAM);
   Glyph left = PEEK(0, -1);
   Glyph right = PEEK(0, 1);
-  if (right == '.') {
-    PORT(1, 0, OUT);
+  if (right == '.')
     return;
-  }
   if (left == '.') {
     // Read
     PORT(1, 0, OUT);
