@@ -232,7 +232,7 @@ static void oper_poke_and_stun(Glyph* restrict gbuffer, Mark* restrict mbuffer,
   _('J', jump)                                                                 \
   _('K', konkat)                                                               \
   _('L', loop)                                                                 \
-  _('M', modulo)                                                               \
+  _('M', multiply)                                                             \
   _('N', movement)                                                             \
   _('O', offset)                                                               \
   _('P', push)                                                                 \
@@ -583,14 +583,14 @@ BEGIN_OPERATOR(loop)
   }
 END_OPERATOR
 
-BEGIN_OPERATOR(modulo)
+BEGIN_OPERATOR(multiply)
   LOWERCASE_REQUIRES_BANG;
   PORT(0, -1, IN);
   PORT(0, 1, IN);
   PORT(1, 0, OUT);
   Usz ia = index_of(PEEK(0, -1));
   Usz ib = index_of(PEEK(0, 1));
-  POKE(1, 0, indexed_glyphs[ib == 0 ? 0 : (ia % ib)]);
+  POKE(1, 0, indexed_glyphs[(ia * ib) % 36]);
 END_OPERATOR
 
 BEGIN_OPERATOR(offset)
