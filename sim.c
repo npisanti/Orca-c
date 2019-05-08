@@ -636,14 +636,17 @@ BEGIN_OPERATOR(query)
   }
 END_OPERATOR
 
-static Usz hash32_shift_mult(Usz key) {
+Usz ranseed;
+void init_random_seed(Usz value) { ranseed = value; }
+
+static Usz hash32_shift_mult(Usz seed) {
   Usz c2 = UINT32_C(0x27d4eb2d);
-  key = (key ^ UINT32_C(61)) ^ (key >> UINT32_C(16));
-  key = key + (key << UINT32_C(3));
-  key = key ^ (key >> UINT32_C(4));
-  key = key * c2;
-  key = key ^ (key >> UINT32_C(15));
-  return key;
+  seed = (seed ^ UINT32_C(61)) ^ (seed >> UINT32_C(16));
+  seed = seed + (seed << UINT32_C(3));
+  seed = seed ^ (seed >> UINT32_C(4));
+  seed = seed * c2;
+  seed = seed ^ (seed >> UINT32_C(15));
+  return seed;
 }
 
 BEGIN_OPERATOR(random)
@@ -666,9 +669,8 @@ BEGIN_OPERATOR(random)
     min = b;
     max = a;
   }
-  Usz key = y * width + x;
-  key = hash32_shift_mult((y * width + x) ^ (Tick_number << UINT32_C(16)));
-  Usz val = key % (max - min) + min;
+  ranseed = hash32_shift_mult(ranseed);
+  Usz val = ranseed % (max - min) + min;
   POKE(1, 0, glyph_of(val));
 END_OPERATOR
 

@@ -1830,6 +1830,39 @@ void push_save_as_form(char const* initial) {
   qform_push_to_nav(qf);
 }
 
+// for initializing random
+// http://www.concentric.net/~Ttwang/tech/inthash.htm
+unsigned int random_seed_mix(long int a, long int b, long int c) {
+  a = a - b;
+  a = a - c;
+  a = a ^ (c >> 13);
+  b = b - c;
+  b = b - a;
+  b = b ^ (a << 8);
+  c = c - a;
+  c = c - b;
+  c = c ^ (b >> 13);
+  a = a - b;
+  a = a - c;
+  a = a ^ (c >> 12);
+  b = b - c;
+  b = b - a;
+  b = b ^ (a << 16);
+  c = c - a;
+  c = c - b;
+  c = c ^ (b >> 5);
+  a = a - b;
+  a = a - c;
+  a = a ^ (c >> 3);
+  b = b - c;
+  b = b - a;
+  b = b ^ (a << 10);
+  c = c - a;
+  c = c - b;
+  c = c ^ (b >> 15);
+  return (unsigned int)c;
+}
+
 //
 // main
 //
@@ -1877,6 +1910,7 @@ int main(int argc, char** argv) {
   int init_grid_dim_x = 57;
   Midi_mode midi_mode;
   midi_mode_init_null(&midi_mode);
+  init_random_seed(random_seed_mix(clock(), time(NULL), getpid()));
   for (;;) {
     int c = getopt_long(argc, argv, "h", tui_options, NULL);
     if (c == -1)
