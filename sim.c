@@ -50,7 +50,7 @@ static Usz index_of(Glyph c) {
 #else
 // Reference implementation
 static Usz index_of(Glyph c) {
-  if (c == '.')
+  if (c == '.' || c == '*')
     return 0;
   if (c >= '0' && c <= '9')
     return (Usz)(c - '0');
@@ -430,10 +430,9 @@ BEGIN_OPERATOR(boing)
   PORT(0, -1, IN | PARAM);
   PORT(0, 1, IN);
   PORT(1, 0, OUT);
-  Glyph left = PEEK(0, -1);
-  Usz rate = index_of(left);
+  Usz rate = index_of(PEEK(0, -1));
   Usz to = index_of(PEEK(0, 1));
-  if (rate == 0 || left == '*')
+  if (rate == 0)
     rate = 1;
   if (to < 2) {
     POKE(1, 0, glyph_of(0));
@@ -452,10 +451,9 @@ BEGIN_OPERATOR(clock)
   PORT(0, -1, IN | PARAM);
   PORT(0, 1, IN);
   PORT(1, 0, OUT);
-  Glyph left = PEEK(0, -1);
-  Usz rate = index_of(left);
+  Usz rate = index_of(PEEK(0, -1));
   Usz mod_num = index_of(PEEK(0, 1));
-  if (rate == 0 || left == '*')
+  if (rate == 0)
     rate = 1;
   if (mod_num == 0)
     mod_num = 8;
@@ -468,10 +466,9 @@ BEGIN_OPERATOR(delay)
   PORT(0, -1, IN | PARAM);
   PORT(0, 1, IN);
   PORT(1, 0, OUT);
-  Glyph left = PEEK(0, -1);
-  Usz rate = index_of(left);
+  Usz rate = index_of(PEEK(0, -1));
   Usz mod_num = index_of(PEEK(0, 1));
-  if (rate == 0 || left == '*')
+  if (rate == 0)
     rate = 1;
   if (mod_num == 0)
     mod_num = 8;
