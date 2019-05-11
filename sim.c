@@ -704,15 +704,15 @@ BEGIN_OPERATOR(uclid)
   PORT(0, 1, IN);
   PORT(1, 0, OUT);
   Glyph left = PEEK(0, -1);
-  Usz pulses = 1;
+  Usz steps = 1;
   if (left != '.' && left != '*')
-    pulses = index_of(left);
-  Usz steps = index_of(PEEK(0, 1));
-  if (steps == 0)
-    steps = 8;
-  Usz pos = (Tick_number + steps - 1) % steps;
-  Usz bucket = (pulses * pos) % steps + pulses;
-  Glyph g = (bucket >= steps) ? '*' : '.';
+    steps = index_of(left);
+  Usz max = index_of(PEEK(0, 1));
+  if (max == 0)
+    max = 8;
+  Usz pos = (Tick_number + max - 1) % max;
+  Usz bucket = (steps * pos) % max + steps;
+  Glyph g = (bucket >= max) ? '*' : '.';
   POKE(1, 0, g);
 END_OPERATOR
 
