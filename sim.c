@@ -710,8 +710,7 @@ BEGIN_OPERATOR(uclid)
   Usz max = index_of(PEEK(0, 1));
   if (max == 0)
     max = 8;
-  Usz pos = (Tick_number + max - 1) % max;
-  Usz bucket = (steps * pos) % max + steps;
+  Usz bucket = (steps * (Tick_number + max - 1)) % max + steps;
   Glyph g = (bucket >= max) ? '*' : '.';
   POKE(1, 0, g);
 END_OPERATOR
