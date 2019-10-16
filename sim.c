@@ -236,7 +236,7 @@ static void oper_poke_and_stun(Glyph* restrict gbuffer, Mark* restrict mbuffer,
   _('M', multiply)                                                             \
   _('N', movement)                                                             \
   _('O', offset)                                                               \
-  _('P', push)                                                                 \
+  _('P', swap)                                                                 \
   _('Q', query)                                                                \
   _('R', random)                                                               \
   _('S', movement)                                                             \
@@ -606,21 +606,22 @@ BEGIN_OPERATOR(offset)
   POKE(1, 0, PEEK(in_y, in_x));
 END_OPERATOR
 
-BEGIN_OPERATOR(push)
+BEGIN_OPERATOR(swap)
   LOWERCASE_REQUIRES_BANG;
-  Usz key = index_of(PEEK(0, -2));
-  Usz len = index_of(PEEK(0, -1));
+  Isz in_ax = (Isz)index_of(PEEK(0, -4)) + 1;
+  Isz in_ay = (Isz)index_of(PEEK(0, -3));
+  Isz in_bx = (Isz)index_of(PEEK(0, -2)) + 1;
+  Isz in_by = (Isz)index_of(PEEK(0, -1));
   PORT(0, -1, IN | PARAM);
   PORT(0, -2, IN | PARAM);
-  PORT(0, 1, IN);
-  if (len == 0)
-    return;
-  Isz out_x = (Isz)(key % len);
-  for (Usz i = 0; i < len; ++i) {
-    LOCK(1, (Isz)i);
-  }
-  PORT(1, out_x, OUT);
-  POKE(1, out_x, PEEK(0, 1));
+  PORT(0, -3, IN | PARAM);
+  PORT(0, -4, IN | PARAM);
+  PORT(in_ay, in_ax, IN | OUT);
+  PORT(in_by, in_bx, IN | OUT);
+  Glyph a = PEEK(in_ay, in_ax);
+  Glyph b = PEEK(in_by, in_bx);
+  POKE_STUNNED(in_ay, in_ax, b);
+  POKE_STUNNED(in_by, in_bx, a);
 END_OPERATOR
 
 BEGIN_OPERATOR(query)
