@@ -616,12 +616,12 @@ BEGIN_OPERATOR(swap)
   PORT(0, -2, IN | PARAM);
   PORT(0, -3, IN | PARAM);
   PORT(0, -4, IN | PARAM);
-  PORT(in_ay, in_ax, IN | OUT);
-  PORT(in_by, in_bx, IN | OUT);
+  PORT(in_ay, in_ax, NONLOCKING | OUT);
+  PORT(in_by, in_bx, NONLOCKING | OUT);
   Glyph a = PEEK(in_ay, in_ax);
   Glyph b = PEEK(in_by, in_bx);
-  POKE_STUNNED(in_ay, in_ax, b);
-  POKE_STUNNED(in_by, in_bx, a);
+  POKE(in_ay, in_ax, b);
+  POKE(in_by, in_bx, a);
 END_OPERATOR
 
 BEGIN_OPERATOR(query)
