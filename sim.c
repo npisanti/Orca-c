@@ -236,7 +236,7 @@ static void oper_poke_and_stun(Glyph* restrict gbuffer, Mark* restrict mbuffer,
   _('M', multiply)                                                             \
   _('N', movement)                                                             \
   _('O', offset)                                                               \
-  _('P', swap)                                                                 \
+  _('P', portal)                                                               \
   _('Q', query)                                                                \
   _('R', random)                                                               \
   _('S', movement)                                                             \
@@ -606,7 +606,7 @@ BEGIN_OPERATOR(offset)
   POKE(1, 0, PEEK(in_y, in_x));
 END_OPERATOR
 
-BEGIN_OPERATOR(swap)
+BEGIN_OPERATOR(portal)
   LOWERCASE_REQUIRES_BANG;
   Isz in_ax = (Isz)index_of(PEEK(0, -4)) + 1;
   Isz in_ay = (Isz)index_of(PEEK(0, -3));
